@@ -23,12 +23,12 @@ from .views import profile, news_list, article_detail, add_comment_to_article, a
 
 urlpatterns = [
     path('', main_spa),
-    path('profile/', profile, name='profile'),
-    path('news/', news_list, name='news_list'),
-    path('article/<int:article_id>/', article_detail, name='article_detail'),
-    path('article/<int:article_id>/add_comment/', add_comment_to_article, name='add_comment_to_article'),
-    path('article/<int:article_id>/comment/<int:parent_comment_id>/add_reply/', add_reply_to_comment, name='add_reply_to_comment'),
-    path('add_article/', add_article, name='add_article'),
+    path('api/profile/', profile, name='profile'),
+    path('api/news/', news_list, name='news_list'),
+    path('api/article/<int:article_id>/', article_detail, name='article_detail'),
+    path('api/article/<int:article_id>/add_comment/', add_comment_to_article, name='add_comment_to_article'),
+    path('api/article/<int:article_id>/comment/<int:parent_comment_id>/add_reply/', add_reply_to_comment, name='add_reply_to_comment'),
+    path('api/add_article/', add_article, name='add_article'),
    
 ]
 
