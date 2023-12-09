@@ -24,7 +24,7 @@ def profile(request):
 
 
 
-@login_required
+
 def news_list(request):
     try:
         user_preferences = UserPreferences.objects.get(user=request.user)
