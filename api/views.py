@@ -1,9 +1,14 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from .models import NewsArticle, Category, UserPreferences, Comment
 from django.forms.models import model_to_dict
+
+
+
+def main_spa(request: HttpRequest) -> HttpResponse:
+    return render(request, 'api/spa/index.html')
 
 @login_required
 def profile(request):
