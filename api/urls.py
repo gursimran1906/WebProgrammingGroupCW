@@ -19,9 +19,10 @@ from django.urls import include, path
 from django.http import HttpResponse
 
 from django.urls import path
-from .views import profile, news_list, article_detail, add_comment_to_article, add_reply_to_comment, add_article
+from .views import profile, news_list, article_detail, add_comment_to_article, add_reply_to_comment, add_article, main_spa
 
 urlpatterns = [
+    path('', main_spa),
     path('profile/', profile, name='profile'),
     path('news/', news_list, name='news_list'),
     path('article/<int:article_id>/', article_detail, name='article_detail'),
