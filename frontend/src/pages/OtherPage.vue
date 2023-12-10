@@ -32,7 +32,7 @@ export default {
           this.articles = response.data.articles;
         })
         .catch((error) => {
-          console.log("Error fetching news:", error);
+          console.log("Errorsss fetching news:", error);
         });
     },
   },
