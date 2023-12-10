@@ -11,7 +11,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   data() {
     return {
-      title: "Main Page",
+      title: "Main 2 Page",
     };
   },
 });
