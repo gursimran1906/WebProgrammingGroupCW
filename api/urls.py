@@ -16,19 +16,35 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls.static import static
 from django.http import HttpResponse
 
 from django.urls import path
-from .views import profile, news_list, article_detail, add_comment_to_article, add_reply_to_comment, add_article, main_spa
+from .views import signup_view, comment_list, login_view, user_logout, update_profile, news_list, article_detail, add_comment_to_article, add_reply_to_comment, add_article, main_spa, get_user_details, all_categories, user_preferences, save_user_preferences
 
 urlpatterns = [
+   
     path('', main_spa),
-    path('api/profile/', profile, name='profile'),
+    path('signup/', signup_view, name='signup'),
+    path('login/', login_view, name='login'),
+    path("signout/",user_logout,name="signout"),
+    
+    path('api/user_details/', get_user_details, name='user details'),
+    path('api/update_profile/', update_profile, name='profile_update'),
     path('api/news/', news_list, name='news_list'),
+    path('api/all_categories/', all_categories, name='all_categories'),
+    path('api/user_preferences/', user_preferences, name='user_preferences'),
+    path('api/save_user_preferences/', save_user_preferences, name='save_user_preferences'),
+
+
+    path('api/get_comments/<int:article_id>/',comment_list , name='comments_article'),
+
     path('api/article/<int:article_id>/', article_detail, name='article_detail'),
     path('api/article/<int:article_id>/add_comment/', add_comment_to_article, name='add_comment_to_article'),
-    path('api/article/<int:article_id>/comment/<int:parent_comment_id>/add_reply/', add_reply_to_comment, name='add_reply_to_comment'),
+    path('api/comment/<int:parent_comment_id>/add_reply/', add_reply_to_comment, name='add_reply_to_comment'),
     path('api/add_article/', add_article, name='add_article'),
    
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

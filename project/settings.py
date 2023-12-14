@@ -64,9 +64,15 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Add the origin of your Vue.js app
 ]
-
+AUTH_USER_MODEL = 'api.CustomUser'
 ROOT_URLCONF = 'project.urls'
 
+
+
+MEDIA_URL = '/api/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'api', 'media')
+
+CORS_ALLOW_ALL_ORIGINS = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
