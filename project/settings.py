@@ -137,7 +137,7 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRESQL_DATABASE', 'default'),
         'USER': os.environ.get('POSTGRESQL_USER', 'group36'),
         'PASSWORD': os.environ.get('POSTGRESQL_PASSWORD', 'database-password'),
-        'HOST': 'postgresql-1-9v6zk',  
+        'HOST': '',  
         'PORT': '5432',  
     }
 }
