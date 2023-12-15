@@ -1,3 +1,9 @@
+# Group36
+
+# WebProgrammingGroupCW
+
+# DO NOT PUSH TO MAIN CREATE NEW BRANCH, WE WILL MERGE LATER
+
 # Template for ECS639U Group Coursework
 
 This template should be used as the starting point for your group coursework in the module ECS639U Web Programming (at Queen Mary University of London). Use Git (github.qmul.ac.uk) to collaborate on the coursework with your group members. Module leader: Paulo Oliva <[p.oliva@qmul.ac.uk](mailto:p.oliva@qmul.ac.uk)>
@@ -61,3 +67,5 @@ Once your project is ready to be deployed you will need to 'build' the Vue app a
 ## License
 
 This code is dedicated to the public domain to the maximum extent permitted by applicable law, pursuant to [CC0](http://creativecommons.org/publicdomain/zero/1.0/).
+
+
