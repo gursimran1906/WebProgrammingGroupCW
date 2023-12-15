@@ -7,20 +7,7 @@ class CustomUser(AbstractUser):
     profile_image = models.ImageField(upload_to='profile_images/', default='/profile_images/default.jpeg', null=True)
     email = models.EmailField(blank=True, null=True)  
     date_of_birth = models.DateField(null=True, blank=True)
-    groups = models.ManyToManyField(
-        Group,
-        verbose_name='groups',
-        blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-        through='CustomUserGroup',
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        verbose_name='user permissions',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        through='CustomUserPermission',
-    )
+     
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
