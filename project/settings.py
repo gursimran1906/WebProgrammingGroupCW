@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv(
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -62,7 +62,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-   " https://group36-web-apps-ec21431.apps.a.comp-teach.qmul.ac.uk",
+   "https://group36-web-apps-ec21431.apps.a.comp-teach.qmul.ac.uk",
     "http://localhost:5173", 
       # Add the origin of your Vue.js app
 ]
@@ -132,7 +132,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.postgresql'),
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DATABASE_NAME', 'default'),
         'USER': os.environ.get('DATABASE_USER', 'database-user'),
         'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'database-password'),
@@ -174,7 +174,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type

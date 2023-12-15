@@ -13,6 +13,7 @@ from django.contrib.auth import get_user_model
 import json
 
 @login_required(login_url='/login')
+@csrf_exempt
 def main_spa(request):
     return render(request, 'api/spa/index.html')
 
@@ -46,7 +47,7 @@ def login_view(request):
         form = AuthenticationForm()  # Use the default AuthenticationForm
     return render(request, 'login.html', {'form': form})
 
-@login_required
+
 @csrf_exempt
 def get_user_details(request):
     if request.user.is_authenticated:
@@ -71,7 +72,6 @@ def user_logout(request):
     return redirect('login')
 
 @csrf_exempt
-@login_required
 def update_profile(request):
     try:
         user = request.user
@@ -249,7 +249,7 @@ def child_comments_list(request, article_id):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
     
-@login_required
+
 @csrf_exempt
 def add_article(request):
     if request.method == 'POST':
@@ -272,7 +272,7 @@ def add_article(request):
         categories = Category.objects.all()
         return render(request, 'add_article.html', {'categories': categories})
 
-@login_required
+
 @csrf_exempt
 def article_detail(request, article_id):
     print(f"Received article_id: {article_id}")
@@ -288,7 +288,6 @@ def article_detail(request, article_id):
     return JsonResponse({'article': model_to_dict(article), 'comments': list(comments)})
 
 @require_POST
-@login_required
 @csrf_exempt
 def add_comment_to_article(request, article_id):
 
@@ -313,7 +312,6 @@ def add_comment_to_article(request, article_id):
     return JsonResponse({'success': False, 'errors': 'Invalid data'})
 
 @require_POST
-@login_required
 @csrf_exempt
 def add_reply_to_comment(request, parent_comment_id):
     parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
@@ -340,7 +338,7 @@ def add_reply_to_comment(request, parent_comment_id):
 
     return JsonResponse({'success': False, 'errors': 'Invalid data'})
 
-@login_required
+
 @csrf_exempt
 def edit_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
