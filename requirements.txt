@@ -11,8 +11,7 @@ sqlparse==0.4.4
 tomli==2.0.1
 types-pytz==2023.3.1.1
 types-PyYAML==6.0.12.12
-typing-extensions==4.8.0  # corrected to match the name in the list
-whitenoise==6.5.0
+typing-extensions==4.8.0  
 django-cors-headers==3.8.0
 click==8.1.7
 Faker==20.1.0
