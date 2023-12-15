@@ -1,12 +1,32 @@
 from django.contrib import admin
-from .models import Category, NewsArticle, UserPreferences, Comment, CustomUser
+from .models import Category, NewsArticle, UserPreferences, Comment, CustomUser, CustomUserGroup, CustomUserPermission
 
-admin.register(CustomUser)
+@admin.register(CustomUser)
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email', 'date_joined', 'is_active', 'is_staff')
+    search_fields = ('username', 'email')
+    list_filter = ('date_joined', 'is_active', 'is_staff')
 
-admin.register(Category)
 
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
 
-admin.register(NewsArticle)
+@admin.register(NewsArticle)
+class NewsArticleAdmin(admin.ModelAdmin):
+    list_display = ('title', 'content', 'publication_date', 'category')
+    search_fields = ('title', 'content')
+    list_filter = ('category', 'publication_date')
 
-admin.register(UserPreferences)
-admin.register(Comment)
+@admin.register(UserPreferences)
+class UserPreferencesAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+    search_fields = ('user__username',)
+    filter_horizontal = ('favorite_categories',)
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('content', 'publication_date', 'user', 'article', 'parent_comment')
+    search_fields = ('content', 'user__username', 'article__title')
+    list_filter = ('publication_date', 'article', 'user', 'parent_comment')
