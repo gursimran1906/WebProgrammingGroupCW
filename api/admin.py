@@ -9,4 +9,6 @@ admin.register(Category)
 admin.register(NewsArticle)
 
 admin.register(UserPreferences)
+
 admin.register(Comment)
+
