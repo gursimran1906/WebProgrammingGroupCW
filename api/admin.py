@@ -1,5 +1,21 @@
 from django.contrib import admin
-from .models import Category, NewsArticle, UserPreferences, Comment
+from .models import Category, NewsArticle, UserPreferences, Comment, CustomUser, CustomUserGroup, CustomUserPermission
+
+@admin.register(CustomUser)
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email', 'date_joined', 'is_active', 'is_staff')
+    search_fields = ('username', 'email')
+    list_filter = ('date_joined', 'is_active', 'is_staff')
+
+@admin.register(CustomUserGroup)
+class CustomUserGroupAdmin(admin.ModelAdmin):
+    list_display = ('custom_user', 'group')
+    search_fields = ('custom_user__username', 'group__name')
+
+@admin.register(CustomUserPermission)
+class CustomUserPermissionAdmin(admin.ModelAdmin):
+    list_display = ('custom_user', 'permission')
+    search_fields = ('custom_user__username', 'permission__codename')
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
