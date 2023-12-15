@@ -1,31 +1,71 @@
-Muhammad Azan: Was assigned to work on the backend for user authentication, creating views and templates for login and signup. He fulfilled his role by completing all authentication tasks and also contributed to editing the User form on the frontend.
+# Group36
 
-Gursimran Singh Bassi: Tasked with backend development for news sections, creating views for each, and successfully did so while also working on the frontend to manage requests to his backend. Played a crucial role in the deployment of the app by becoming familiar with changes needed to make the application live.
+# WebProgrammingGroupCW
 
-Muhammad Huraira: Responsible for the frontend design using Vue, specifically the website's layout, and how news articles appear. Accomplished these objectives as assigned.
+# DO NOT PUSH TO MAIN CREATE NEW BRANCH, WE WILL MERGE LATER
 
-All team members completed the work they were allocated.
+# Template for ECS639U Group Coursework
 
-Please be advised that the articles have been generated using a script located at ./api/management/generate_articles.py. The assignment of categories to the generated articles was performed randomly for testing purposes.
+This template should be used as the starting point for your group coursework in the module ECS639U Web Programming (at Queen Mary University of London). Use Git (github.qmul.ac.uk) to collaborate on the coursework with your group members. Module leader: Paulo Oliva <[p.oliva@qmul.ac.uk](mailto:p.oliva@qmul.ac.uk)>
 
+## Local development
 
-Format{Username,Password}
+To run this project in your development machine, follow these steps:
 
-Test Users(5):
+1. Create and activate a conda environment
 
-{testuser1,testpassword1}
-{testuser2,testpassword2}
-{testuser3,testpassword3}
-{testuser4,testpassword4}
-{testuser5,testpassword5}
+2. Fork this repo and clone your fork (or clone the forked repo of one of your team members), e.g.
 
+    ```console
+    $ git clone https://github.qmul.ac.uk/<username>/cwgroup
+    ```
 
-Log in to Admin page and/or superuser:
-{admin, admin}
+3. Install Pyhton dependencies (main folder):
 
+    ```console
+    $ pip install -r requirements.txt
+    ```
 
+4. Create a development database:
 
-URL of the deployed application:
+    ```console
+    $ python manage.py migrate
+    ```
 
-https://group36-web-apps-ec21431.apps.a.comp-teach.qmul.ac.uk/
+5. Install JavaScript dependencies (from 'frontend' folder):
+
+    ```console
+    $ npm install
+    ```
+
+6. If everything is alright, you should be able to start the Django development server from the main folder:
+
+    ```console
+    $ python manage.py runserver
+    ```
+
+7. and the Vue server from the 'frontend' sub-folder:
+
+    ```console
+    $ npm run dev
+    ```
+
+8. Open your browser and go to http://localhost:5173, you will be greeted with a template page.
+
+## OpenShift deployment
+
+Once your project is ready to be deployed you will need to 'build' the Vue app and place it in Django's static folder.
+
+1. The build command in package.json and the vite.config.ts files have already been modified so that when running 'npm run build' the generated JavaScript and CSS files will be placed in the mainapp static folder, and the index.html file will be placed in the templates folder:
+
+    ```console
+    $ npm run build
+    ```
+
+2. You should then follow the instruction on QM+ on how to deploy your app on EECS's OpenShift live server.
+
+## License
+
+This code is dedicated to the public domain to the maximum extent permitted by applicable law, pursuant to [CC0](http://creativecommons.org/publicdomain/zero/1.0/).
+
 
