@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 
 class CustomUser(AbstractUser):
     
-    profile_image = models.ImageField(upload_to='profile_images/', default='/profile_images/default.jpg', null=True)
+    profile_image = models.ImageField(upload_to='profile_images/', default='/profile_images/default.jpeg', null=True)
     email = models.EmailField(blank=True, null=True)  
     date_of_birth = models.DateField(null=True, blank=True)
     groups = models.ManyToManyField(
