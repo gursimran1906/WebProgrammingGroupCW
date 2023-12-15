@@ -62,7 +62,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-   " https://group36-web-apps-ec21431.apps.a.comp-teach.qmul.ac.uk",
+   "https://group36-web-apps-ec21431.apps.a.comp-teach.qmul.ac.uk",
     "http://localhost:5173", 
       # Add the origin of your Vue.js app
 ]
