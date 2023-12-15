@@ -126,21 +126,21 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': database.config()
-# }
-
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRESQL_DATABASE', 'default'),
-        'USER': os.environ.get('POSTGRESQL_USER', 'group36'),
-        'PASSWORD': os.environ.get('POSTGRESQL_PASSWORD', 'database-password'),
-        'HOST': '',  
-        'PORT': '5432',  
-    }
+    'default': database.config()
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('POSTGRESQL_DATABASE', 'default'),
+#         'USER': os.environ.get('POSTGRESQL_USER', 'group36'),
+#         'PASSWORD': os.environ.get('POSTGRESQL_PASSWORD', 'database-password'),
+#         'HOST': '',  
+#         'PORT': '5432',  
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
