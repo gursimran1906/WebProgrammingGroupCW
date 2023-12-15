@@ -29,7 +29,7 @@ class Category(models.Model):
         return self.name
 
 class NewsArticle(models.Model):
-    id = models.AutoField(primary_key=True)  # Explicitly define primary key
+    id = models.AutoField(primary_key=True)  
     title = models.CharField(max_length=255)
     content = models.TextField()
     publication_date = models.DateTimeField(auto_now_add=True)
@@ -39,7 +39,7 @@ class NewsArticle(models.Model):
         return (str(self.id) +" - "+ self.title )
 
 class UserPreferences(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='preferences')
+    user = models.OneToOneField('api.CustomUser', on_delete=models.CASCADE, related_name='preferences')
     favorite_categories = models.ManyToManyField(Category)
 
     def __str__(self):
@@ -48,7 +48,7 @@ class UserPreferences(models.Model):
 class Comment(models.Model):
     content = models.TextField()
     publication_date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey('api.CustomUser', on_delete=models.CASCADE)
     article = models.ForeignKey(NewsArticle, on_delete=models.CASCADE)
     parent_comment = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, default=None)
 
@@ -56,9 +56,9 @@ class Comment(models.Model):
         return f"Comment by {self.user.username} on {self.publication_date} - {self.article.title}"
 
 class CustomUserGroup(models.Model):
-    custom_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    custom_user = models.ForeignKey('api.CustomUser', on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
 class CustomUserPermission(models.Model):
-    custom_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    custom_user = models.ForeignKey('api.CustomUser', on_delete=models.CASCADE)
     permission = models.ForeignKey(Permission, on_delete=models.CASCADE)
