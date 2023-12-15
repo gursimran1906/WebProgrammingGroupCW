@@ -4,16 +4,20 @@
       <router-link to="/" class="navbar-brand">Group 36 News App</router-link>
 
       <div>
+        <!-- Profile link -->
         <router-link to="/profile" class="navbar-brand">
           <font-awesome-icon icon="user" />
         </router-link>
+
+        <!-- Logout button -->
         <a
           @mouseover="changeCursorOnHover"
           @mouseleave="resetCursor"
           class="text-decoration-none"
           @click="Logout"
-          >Log Out</a
         >
+          Log Out
+        </a>
       </div>
     </div>
   </header>
@@ -35,13 +39,13 @@ export default defineComponent({
       // Reset cursor type when not hovering
       document.body.style.cursor = "auto";
     },
+
     Logout() {
       axios
         .post("http://127.0.0.1:8000/signout/")
-        .then((response) => {
-          console.log("Logged Out successfully", response);
-          window.location.reload();
-          alert("Logged out successfully!!");
+        .then(() => {
+          alert("Logged out successfully!! ");
+          window.location.href = "http://127.0.0.1:8000/";
         })
         .catch((error) => {
           console.error(error);

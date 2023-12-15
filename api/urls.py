@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.http import HttpResponse
 
 from django.urls import path
-from .views import signup_view, comment_list, login_view, user_logout, update_profile, news_list, article_detail, add_comment_to_article, add_reply_to_comment, add_article, main_spa, get_user_details, all_categories, user_preferences, save_user_preferences
+from .views import signup_view, delete_comment, edit_comment, parent_comment_list, child_comments_list, login_view, user_logout, update_profile, news_list, article_detail, add_comment_to_article, add_reply_to_comment, add_article, main_spa, get_user_details, all_categories, user_preferences, save_user_preferences
 
 urlpatterns = [
    
@@ -37,13 +37,14 @@ urlpatterns = [
     path('api/save_user_preferences/', save_user_preferences, name='save_user_preferences'),
 
 
-    path('api/get_comments/<int:article_id>/',comment_list , name='comments_article'),
-
+    path('api/get_comments/<int:article_id>/',parent_comment_list , name='comments_article'),
+    path('api/get_child_comments/<int:article_id>/',child_comments_list, name='child_comments_article'),   
     path('api/article/<int:article_id>/', article_detail, name='article_detail'),
     path('api/article/<int:article_id>/add_comment/', add_comment_to_article, name='add_comment_to_article'),
     path('api/comment/<int:parent_comment_id>/add_reply/', add_reply_to_comment, name='add_reply_to_comment'),
     path('api/add_article/', add_article, name='add_article'),
-   
+    path('api/comment/<int:comment_id>/edit_comment/', edit_comment, name='edit_comment'),
+    path('api/comment/<int:comment_id>/delete/', delete_comment, name='delete_comment'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -54,6 +54,7 @@ def get_user_details(request):
             'email': request.user.email,
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
+            'date_of_birth': request.user.date_of_birth,
             'profile_image': request.user.profile_image.url if request.user.profile_image else None,
         }
         return JsonResponse(user_details)
@@ -73,19 +74,20 @@ def user_logout(request):
 def update_profile(request):
     try:
         user = request.user
-        form = ProfileUpdateForm(request.POST, request.FILES, instance=user)
-        print(user)
-        if form.is_valid():
-            # Generate a unique file name based on user ID
-            unique_filename = f"user_{user.pk}_{form.cleaned_data['profile_image'].name}"
-            
-            # Set the profile_image field with the unique filename
-            form.cleaned_data['profile_image'].name = unique_filename
+        
 
-            form.save()
-            return JsonResponse({'message': 'Profile updated successfully'})
-        else:
+        if 'profile_image' in request.FILES:
+            form = ProfileUpdateForm(request.POST, request.FILES, instance=user)
+            if form.is_valid():
+                updated_user = form.save()
+                return JsonResponse({'message': 'Profile updated successfully', 'file_name': updated_user.profile_image.name})
+            else:
                 return JsonResponse({'error': 'Invalid form data'}, status=400)
+        else:
+            form = ProfileUpdateForm(request.POST, request.FILES, instance=user)
+            form.save()
+            return JsonResponse({'message': 'Profile updated successfully', 'file_name': user.profile_image.name})
+        
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
@@ -108,7 +110,7 @@ def news_list(request):
             articles = NewsArticle.objects.filter(category__in=favorite_categories)
         except UserPreferences.DoesNotExist:
             # Handle the case where UserPreferences does not exist for the user
-            articles = NewsArticle.objects.all()
+            articles = {}
 
         # Prepare data with category names
         data = {
@@ -130,22 +132,7 @@ def news_list(request):
         return JsonResponse({'error': str(e)}, status=500)
     
 
-    #     # Retrieve UserPreferences using get_object_or_404 to handle the case when the object is not found
-    #     user_preferences = get(UserPreferences, user=custom_user)
-    #     favorite_categories = user_preferences.favorite_categories.values_list('id', flat=True)
-
-    #     if not favorite_categories:
-    #         # Handle the case where the user has not selected any favorite categories
-    #         return JsonResponse({'articles': []})  # Return an empty list if no favorite categories
-
-    #     articles = NewsArticle.objects.filter(category__in=favorite_categories)
-
-    # except UserPreferences.DoesNotExist:
-    #     # Handle the case where UserPreferences does not exist for the user
-    #     # You can create a default UserPreferences instance for the user or take other actions
-    #     articles = NewsArticle.objects.all()  # Return all articles if UserPreferences does not exist
-
-    # return JsonResponse({'articles': list(articles.values())})
+   
 
 def all_categories(request):
     try:
@@ -212,14 +199,14 @@ def save_user_preferences(request):
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-def comment_list(request, article_id):
+def parent_comment_list(request, article_id):
     try:
         user = request.user
         if not user.is_authenticated:
             return JsonResponse({'error': 'User not authenticated'}, status=401)
 
-        # Order comments by publication date in descending order
-        comments = Comment.objects.filter(article_id=article_id).order_by('-publication_date')
+        # Filter comments by article_id and those with no parent_comment
+        comments = Comment.objects.filter(article_id=article_id, parent_comment__isnull=True).order_by('-publication_date')
         comments_data = [
             {
                 'id': comment.id,
@@ -231,6 +218,33 @@ def comment_list(request, article_id):
             for comment in comments
         ]
         return JsonResponse({'comments': comments_data}, status=200)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+def child_comments_list(request, article_id):
+    try:
+        user = request.user
+        if not user.is_authenticated:
+            return JsonResponse({'error': 'User not authenticated'}, status=401)
+
+        # Filter child comments by article_id and only include those with a parent_comment
+        child_comments = Comment.objects.filter(article_id=article_id, parent_comment__isnull=False).order_by('publication_date')
+        child_comments_data = {}
+
+        # Organize child comments by parent_comment_id
+        for comment in child_comments:
+            parent_id = comment.parent_comment_id
+            if parent_id not in child_comments_data:
+                child_comments_data[parent_id] = []
+            child_comments_data[parent_id].append({
+                'id': comment.id,
+                'content': comment.content,
+                'publication_date': comment.publication_date,
+                'user': comment.user.username,
+                # Add more fields as needed
+            })
+
+        return JsonResponse({'child_comments': child_comments_data}, status=200)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
     
@@ -324,24 +338,40 @@ def add_reply_to_comment(request, parent_comment_id):
     return JsonResponse({'success': False, 'errors': 'Invalid data'})
 
 @login_required
+@csrf_exempt
 def edit_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
 
-    if request.method == 'POST' and request.user == comment.user:
-        content = request.POST.get('content')
+    user = request.user
+    if not user.is_authenticated:
+        return JsonResponse({'error': 'User not authenticated'}, status=401)
 
-        if content:
-            comment.content = content
-            comment.save()
+    if user == comment.user:
+        try:
+            data = json.loads(request.body)
+            content = data.get('content')
 
-            return JsonResponse({'success': True, 'comment': model_to_dict(comment)})
+            if content:
+                comment.content = content
+                comment.save()
+
+                return JsonResponse({'success': True, 'comment': model_to_dict(comment)})
+            
+        except json.JSONDecodeError:
+            print('Json Erorr')
 
     return JsonResponse({'success': False, 'errors': 'Invalid data'})
+
 @login_required
+@csrf_exempt
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
 
-    if request.method == 'POST' and request.user == comment.user:
+    user = request.user
+    if not user.is_authenticated:
+        return JsonResponse({'error': 'User not authenticated'}, status=401)
+    
+    if user == comment.user:
         comment.delete()
         return JsonResponse({'success': True})
 

@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 
 class CustomUser(AbstractUser):
     
-    profile_image = models.ImageField(upload_to='profile_images/', default='default.jpg', null=True)
+    profile_image = models.ImageField(upload_to='profile_images/', default='/profile_images/default.jpg', null=True)
     email = models.EmailField(blank=True, null=True)  
     date_of_birth = models.DateField(null=True, blank=True)
     groups = models.ManyToManyField(
@@ -53,7 +53,7 @@ class Comment(models.Model):
     parent_comment = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, default=None)
 
     def __str__(self):
-        return f"Comment by {self.user.username} on {self.article.title}"
+        return f"Comment by {self.user.username} on {self.publication_date} - {self.article.title}"
 
 class CustomUserGroup(models.Model):
     custom_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

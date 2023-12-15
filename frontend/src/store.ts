@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 interface UserDetails {
   // Define your user details structure here
   profile_image: string;
+  username: string;
   email: string;
   first_name: string;
   last_name: string;

@@ -1,12 +1,14 @@
 <template>
   <div class="container mt-2">
-    <h1 class="mb-3">News Page</h1>
+    <!-- Check if articles are available -->
     <div v-if="articles.length > 0">
+      <!-- Iterate over articles and display each article in a card -->
       <div
         v-for="article in articles"
         :key="article.id"
         class="card mb-3 shadow"
       >
+        <!-- Card Header with article title and category -->
         <div class="card-header d-flex justify-content-between">
           <div class="card-title">
             <h5 class="inline">{{ article.title }}</h5>
@@ -17,66 +19,94 @@
             </p>
           </div>
         </div>
+
+        <!-- Card Body with article content -->
         <div class="card-body">
           <p class="card-text">{{ article.content }}</p>
         </div>
+
+        <!-- Card Footer with CommentForm and CommentsSection -->
         <div class="card-footer">
-          <p>Add Comment:</p>
+          <!-- CommentForm component with articleId prop and event handler -->
           <CommentForm
             :articleId="article.id"
-            :placeholder="article.title"
-            @commentAdded="handleCommentAdded"
+            :placeholder="'Comment to Article'"
+            @commentAdded="handleCommentAdded(article.id)"
           />
-          <p class="mt-2">Comments:</p>
-          <Comments :key="commentKey" :article-id="article.id" />
+
+          <!-- Display comments using CommentsSection component -->
+
+          <CommentsSection
+            :commentReload="article.commentReload"
+            :article-id="article.id"
+          />
         </div>
       </div>
     </div>
+
+    <!-- Display message if no articles are available -->
     <div v-else>
-      <p>No articles available.</p>
+      <p>No articles available. Please choose My News under profile page.</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Comments from "../components/Comments.vue";
+import CommentsSection from "../components/CommentSection.vue";
 import CommentForm from "../components/CommentForm.vue";
+
+// Define the Article interface
+interface Article {
+  id: number;
+  title: string;
+  category: string;
+  content: string;
+  commentReload: boolean;
+}
 
 export default defineComponent({
   name: "NewsPage",
   components: {
-    Comments,
+    CommentsSection,
     CommentForm,
   },
   data() {
     return {
-      commentKey: 0,
-      articles: [] as any[], // Assuming the structure of your articles
+      articles: [] as Article[], // Array to store articles
     };
   },
   methods: {
-    handleCommentAdded() {
-      console.log("Comment added!");
-
-      this.commentKey += 1;
-    },
-    async fetchArticles() {
+    // Fetch articles from the API
+    async fetchArticles(): Promise<void> {
       try {
         const response = await fetch("http://127.0.0.1:8000/api/news/"); // Replace with your actual API endpoint
         const data = await response.json();
-        this.articles = data.articles;
+
+        // Map articles and add commentReload property
+        this.articles = data.articles.map((article: Article) => ({
+          ...article,
+          commentReload: false,
+        }));
       } catch (error) {
         console.error("Error fetching articles:", error);
       }
     },
+
+    // Handle comment added event and update commentReload property
+    handleCommentAdded(articleId: number): void {
+      const articleIndex = this.articles.findIndex(
+        (article) => article.id === articleId
+      );
+      if (articleIndex !== -1) {
+        this.articles[articleIndex].commentReload =
+          !this.articles[articleIndex].commentReload;
+      }
+    },
   },
   mounted() {
+    // Fetch articles when the component is mounted
     this.fetchArticles();
   },
 });
 </script>
-
-<style scoped>
-/* Add your custom styles or Bootstrap classes here */
-</style>
