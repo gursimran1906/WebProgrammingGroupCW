@@ -15,7 +15,6 @@ typing-extensions==4.8.0  # corrected to match the name in the list
 whitenoise==6.5.0
 django-cors-headers==3.8.0
 click==8.1.7
-django-cors-headers==4.2.0
 Faker==20.1.0
 install==1.3.5
 lorem-text==2.1
