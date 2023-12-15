@@ -16,7 +16,7 @@ import json
 def main_spa(request):
     return render(request, 'api/spa/index.html')
 
-
+@csrf_exempt
 def signup_view(request):
     form = SignUpForm()
     if request.method == 'POST':
@@ -31,7 +31,7 @@ def signup_view(request):
 
     return render(request, 'signup.html', {'form': form})
 
-
+@csrf_exempt
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)  # Use the default AuthenticationForm
@@ -47,6 +47,7 @@ def login_view(request):
     return render(request, 'login.html', {'form': form})
 
 @login_required
+@csrf_exempt
 def get_user_details(request):
     if request.user.is_authenticated:
         user_details = {
@@ -91,7 +92,7 @@ def update_profile(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-
+@csrf_exempt
 def news_list(request):
     try:
         # Check user authentication
@@ -133,7 +134,7 @@ def news_list(request):
     
 
    
-
+@csrf_exempt
 def all_categories(request):
     try:
         categories = Category.objects.all()
@@ -145,7 +146,7 @@ def all_categories(request):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
-
+@csrf_exempt
 def user_preferences(request):
     try:
         # Check user authentication
@@ -198,7 +199,7 @@ def save_user_preferences(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-
+@csrf_exempt
 def parent_comment_list(request, article_id):
     try:
         user = request.user
@@ -220,7 +221,7 @@ def parent_comment_list(request, article_id):
         return JsonResponse({'comments': comments_data}, status=200)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
-    
+@csrf_exempt   
 def child_comments_list(request, article_id):
     try:
         user = request.user
@@ -249,6 +250,7 @@ def child_comments_list(request, article_id):
         return JsonResponse({'error': str(e)}, status=500)
     
 @login_required
+@csrf_exempt
 def add_article(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -271,6 +273,7 @@ def add_article(request):
         return render(request, 'add_article.html', {'categories': categories})
 
 @login_required
+@csrf_exempt
 def article_detail(request, article_id):
     print(f"Received article_id: {article_id}")
     try:
