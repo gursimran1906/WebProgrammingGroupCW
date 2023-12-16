@@ -17,6 +17,7 @@ import json
 def main_spa(request):
     return render(request, 'api/spa/index.html')
 
+@login_required
 @csrf_exempt
 def signup_view(request):
     form = SignUpForm()
@@ -32,6 +33,7 @@ def signup_view(request):
 
     return render(request, 'signup.html', {'form': form})
 
+@login_required
 @csrf_exempt
 def login_view(request):
     if request.method == 'POST':
@@ -47,7 +49,7 @@ def login_view(request):
         form = AuthenticationForm()  # Use the default AuthenticationForm
     return render(request, 'login.html', {'form': form})
 
-
+@login_required
 @csrf_exempt
 def get_user_details(request):
     if request.user.is_authenticated:
@@ -63,7 +65,7 @@ def get_user_details(request):
     else:
         return JsonResponse({'error': 'User not authenticated'})
 
-
+@login_required
 @csrf_exempt
 def user_logout(request):
     logout(request)
@@ -71,6 +73,7 @@ def user_logout(request):
     
     return redirect('login')
 
+@login_required
 @csrf_exempt
 def update_profile(request):
     try:
@@ -91,7 +94,8 @@ def update_profile(request):
         
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
-
+    
+@login_required
 @csrf_exempt
 def news_list(request):
     try:
@@ -135,6 +139,7 @@ def news_list(request):
 
    
 @csrf_exempt
+@login_required
 def all_categories(request):
     try:
         categories = Category.objects.all()
@@ -147,6 +152,7 @@ def all_categories(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 @csrf_exempt
+@login_required
 def user_preferences(request):
     try:
         # Check user authentication
@@ -175,6 +181,7 @@ def user_preferences(request):
         return JsonResponse({'favorite_categories': None})
     
 @csrf_exempt
+@login_required
 def save_user_preferences(request):
     if request.method == 'POST':
         try:
@@ -200,6 +207,7 @@ def save_user_preferences(request):
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 @csrf_exempt
+@login_required
 def parent_comment_list(request, article_id):
     try:
         user = request.user
@@ -221,7 +229,8 @@ def parent_comment_list(request, article_id):
         return JsonResponse({'comments': comments_data}, status=200)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
-@csrf_exempt   
+@csrf_exempt 
+@login_required  
 def child_comments_list(request, article_id):
     try:
         user = request.user
@@ -249,7 +258,7 @@ def child_comments_list(request, article_id):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
     
-
+@login_required
 @csrf_exempt
 def add_article(request):
     if request.method == 'POST':
@@ -274,6 +283,7 @@ def add_article(request):
 
 
 @csrf_exempt
+@login_required
 def article_detail(request, article_id):
     print(f"Received article_id: {article_id}")
     try:
@@ -288,6 +298,7 @@ def article_detail(request, article_id):
     return JsonResponse({'article': model_to_dict(article), 'comments': list(comments)})
 
 @require_POST
+@login_required
 @csrf_exempt
 def add_comment_to_article(request, article_id):
 
@@ -312,6 +323,7 @@ def add_comment_to_article(request, article_id):
     return JsonResponse({'success': False, 'errors': 'Invalid data'})
 
 @require_POST
+@login_required
 @csrf_exempt
 def add_reply_to_comment(request, parent_comment_id):
     parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
@@ -338,7 +350,7 @@ def add_reply_to_comment(request, parent_comment_id):
 
     return JsonResponse({'success': False, 'errors': 'Invalid data'})
 
-
+@login_required
 @csrf_exempt
 def edit_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
