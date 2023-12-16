@@ -17,7 +17,7 @@ import json
 def main_spa(request):
     return render(request, 'api/spa/index.html')
 
-@login_required(login_url='/login')
+
 @csrf_exempt
 def signup_view(request):
     form = SignUpForm()
@@ -33,7 +33,7 @@ def signup_view(request):
 
     return render(request, 'signup.html', {'form': form})
 
-@login_required(login_url='/login')
+
 @csrf_exempt
 def login_view(request):
     if request.method == 'POST':
